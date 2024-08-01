@@ -21,6 +21,7 @@ SessionLocal = async_sessionmaker(
 async def get_db():
     async with SessionLocal() as session:
         yield session
+        await session.close()
 
 
 class Base(DeclarativeBase):

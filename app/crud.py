@@ -17,6 +17,9 @@ async def get_user_by_username(session: AsyncSession, username: str):
     result = await session.execute(select(User).filter(User.username == username))
     return result.scalars().first()
 
+async def get_users(session: AsyncSession):
+    result = await session.execute(select(User))
+    return result.scalars().all()
 
 async def create_user(session: AsyncSession, user_data: UserCreate):
     hashed_password = get_password_hash(user_data.password)

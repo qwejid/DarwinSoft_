@@ -9,6 +9,7 @@ from app.utils.security import verify_password
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 import os
+from app.schemas import User
 
 load_dotenv()
 
@@ -69,3 +70,15 @@ async def login_for_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get('/users/<username>')
+async def get_user(session: Annotated[AsyncSession, Depends(get_db)], username: str) -> User:
+    user = await crud.get_user_by_username(session, username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+@router.get('/users')
+async def get_users(session: Annotated[AsyncSession, Depends(get_db)]) -> list[User]:
+    users = await crud.get_users(session)
+    return users
