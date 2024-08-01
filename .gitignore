@@ -1,0 +1,16 @@
+# .gitignore
+venv/
+.env/
+*.venv
+.env
+
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+.vscode/
+
+alembic_version.py
+versions/
