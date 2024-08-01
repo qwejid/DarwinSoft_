@@ -139,3 +139,5 @@ poetry add <package_name>
 ```bash
 poetry update
 ```
+
+Docker не работает не смогла проверить, почему то не запускатся на локальной машине
