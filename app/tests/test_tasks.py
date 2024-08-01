@@ -6,10 +6,17 @@ from httpx import AsyncClient
 async def test_create_task(client: AsyncClient, create_user_and_get_token: str):
     token = create_user_and_get_token
 
-    task_data = {"title": "Тест", "description": "Тест."}
+    task_data = {
+        "title": "Тест",
+        "description": "Тест.",
+    }
 
     response = await client.post(
-        "/tasks/", json=task_data, headers={"Authorization": f"Bearer {token}"}
+        "/tasks/",
+        json=task_data,
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
     )
 
     assert response.status_code == 201
@@ -19,29 +26,48 @@ async def test_create_task(client: AsyncClient, create_user_and_get_token: str):
 
 
 @pytest.mark.asyncio
-async def test_get_tasks(client: AsyncClient, create_user_and_get_token: str):
+async def test_get_tasks(
+    client: AsyncClient,
+    create_user_and_get_token: str,
+):
 
     token = create_user_and_get_token
 
-    response = await client.get("/tasks/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        "/tasks/",
+        headers={"Authorization": f"Bearer {token}"},
+    )
     assert response.status_code == 200
     tasks = response.json()
     assert isinstance(tasks, list)
 
 
 @pytest.mark.asyncio
-async def test_get_task_by_id(client: AsyncClient, create_user_and_get_token: str):
+async def test_get_task_by_id(
+    client: AsyncClient,
+    create_user_and_get_token: str,
+):
     token = create_user_and_get_token
 
-    task_data = {"title": "Это тест", "description": "Тестовая задача"}
+    task_data = {
+        "title": "Это тест",
+        "description": "Тестовая задача",
+    }
     response = await client.post(
-        "/tasks/", json=task_data, headers={"Authorization": f"Bearer {token}"}
+        "/tasks/",
+        json=task_data,
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
     )
     assert response.status_code == 201
     task_id = response.json()["id"]
 
     response = await client.get(
-        f"/tasks/{task_id}", headers={"Authorization": f"Bearer {token}"}
+        f"/tasks/{task_id}",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
     )
 
     assert response.status_code == 200
@@ -51,12 +77,22 @@ async def test_get_task_by_id(client: AsyncClient, create_user_and_get_token: st
 
 
 @pytest.mark.asyncio
-async def test_update_task(client: AsyncClient, create_user_and_get_token: str):
+async def test_update_task(
+    client: AsyncClient,
+    create_user_and_get_token: str,
+):
     token = create_user_and_get_token
 
-    task_data = {"title": "Это тест", "description": "Тестовая задача"}
+    task_data = {
+        "title": "Это тест",
+        "description": "Тестовая задача",
+    }
     response = await client.post(
-        "/tasks/", json=task_data, headers={"Authorization": f"Bearer {token}"}
+        "/tasks/",
+        json=task_data,
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
     )
     assert response.status_code == 201
     task_id = response.json()["id"]
@@ -78,12 +114,22 @@ async def test_update_task(client: AsyncClient, create_user_and_get_token: str):
 
 
 @pytest.mark.asyncio
-async def test_delete_task(client: AsyncClient, create_user_and_get_token: str):
+async def test_delete_task(
+    client: AsyncClient,
+    create_user_and_get_token: str,
+):
     token = create_user_and_get_token
 
-    task_data = {"title": "Это тест", "description": "Тестовая задача"}
+    task_data = {
+        "title": "Это тест",
+        "description": "Тестовая задача",
+    }
     response = await client.post(
-        "/tasks/", json=task_data, headers={"Authorization": f"Bearer {token}"}
+        "/tasks/",
+        json=task_data,
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
     )
     assert response.status_code == 201
     task_id = response.json()["id"]

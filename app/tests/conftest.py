@@ -40,12 +40,42 @@ async def client(session: AsyncSession):
 
 
 @pytest_asyncio.fixture(scope="function")
-async def create_user_and_get_token(client: AsyncClient):
-    user_data = {"username": "testuser", "password": "testpassword"}
+async def create_user_and_get_token(client: AsyncClient):      
+    
+    user_data = {
+        "username": "testuser",
+        "password": "testpassword"
+    }
+    
     response = await client.post("/register", json=user_data)
     assert response.status_code == 201
-
+        
+        
     response = await client.post("/token", data=user_data)
     assert response.status_code == 200
     token = response.json()["access_token"]
+    
     return token
+
+import pytest_asyncio
+from httpx import AsyncClient
+
+@pytest_asyncio.fixture(scope="function")
+async def create_users_and_get_token(client: AsyncClient):
+        
+    for i in range(1, 3):  # Создаем двух пользователей
+        user_data = {
+            "username": f"testuser{i}",
+            "password": f"testpassword{i}"
+        }
+        
+        response = await client.post("/register", json=user_data)
+        assert response.status_code == 201
+        
+        if i == 1:
+            response = await client.post("/token", data=user_data)
+            assert response.status_code == 200
+            token = response.json()["access_token"]
+    
+    return token
+
