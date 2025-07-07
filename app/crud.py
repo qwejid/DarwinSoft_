@@ -39,7 +39,22 @@ async def create_task(session: AsyncSession, task: TaskCreate, user_id: int):
 
 
 async def get_tasks(session: AsyncSession, user_id: int):
-    stmt = select(Task).filter(Task.owner_id == user_id).order_by(Task.id)
+    stmt = (
+        select(Task)
+        .filter(
+            or_(
+                Task.owner_id == user_id,
+                Task.id.in_(
+                    select(TaskPermission.task_id)
+                    .filter(
+                        TaskPermission.user_id == user_id,
+                        TaskPermission.can_read == True
+                    )
+                )
+            )
+        )
+        .order_by(Task.id)
+    )
     result: Result = await session.execute(stmt)
     return result.scalars().all()
 
